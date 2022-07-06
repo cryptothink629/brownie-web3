@@ -4,8 +4,8 @@ contract Number {
     uint public number;
 	event Add(uint number);
 
-    constructor (uint v) public {
-        number = v;
+    constructor () public {
+        number = 1;
     }
 
     function set(uint v) public {
