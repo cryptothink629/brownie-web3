@@ -15,7 +15,7 @@ def deploy(file_path, const=(), transaction=None):
     abi, bytecode = get_abi_from_source(file_path)
     c = w3.eth.contract(abi=abi, bytecode=bytecode)
     tx_hash = c.constructor(*const).transact(transaction)
-    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=180)
     print(tx_receipt)
 
 
@@ -39,4 +39,5 @@ def deploy_sendeth():
 
 
 if __name__ == '__main__':
-    deploy_airdrop()
+    deploy_myerc20()
+    # deploy_airdrop()
