@@ -1,3 +1,4 @@
+from src.constants import ERC721
 from src.utils import get_abi_from_source
 from src.web3_client import w3
 
@@ -25,12 +26,6 @@ def deploy_airdrop():
     # 0xa872270251cAa8EbaF9Afd9697F62fcE0EC9Ad4C
 
 
-def deploy_myerc20():
-    file_path = '../contracts/MyERC20.sol'
-    deploy(file_path, const=('Nothing', 'NONE'))
-    # 0xd63e17F85Ee3EEA679DadF58BDF1E45546066F37
-
-
 def deploy_sendeth():
     file_path = '../contracts/SendETH.sol'
     value = w3.toWei(0.0001, 'ether')
@@ -38,6 +33,14 @@ def deploy_sendeth():
     deploy(file_path, transaction=transaction)
 
 
+def deploy_erc20(path, name, symbol):
+    deploy(path, const=(name, symbol))
+
+
+def deploy_erc721(path, name, symbol):
+    deploy(path, const=(name, symbol))
+
+
 if __name__ == '__main__':
-    deploy_myerc20()
-    # deploy_airdrop()
+    deploy_erc721(ERC721, 'Bored ape yat club', 'BAYC')
+    # deploy_erc20(ERC20, 'Nothing', 'NONE')
