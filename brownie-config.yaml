@@ -9,3 +9,6 @@ networks:
 console:
     show_colors: true
     color_style: manni
+
+project_structure:
+    contracts: brownie-contracts

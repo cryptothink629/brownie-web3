@@ -1,4 +1,4 @@
-from src.constants import ERC721
+from src.constants import BAYC
 from src.utils import get_abi_from_source
 from src.web3_client import w3
 
@@ -41,6 +41,11 @@ def deploy_erc721(path, name, symbol):
     deploy(path, const=(name, symbol))
 
 
+def deploy_BAYC(path, name, symbol, max, time_start):
+    deploy(path, const=(name, symbol, max, time_start))
+
+
 if __name__ == '__main__':
-    deploy_erc721(ERC721, 'Bored ape yat club', 'BAYC')
+    # deploy_erc721(ERC721, 'Bored ape yat club', 'BAYC')
+    deploy_BAYC(BAYC, 'Bored Ape Yacht Club', 'BAYC', 10000, 10000)
     # deploy_erc20(ERC20, 'Nothing', 'NONE')

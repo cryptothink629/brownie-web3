@@ -10,3 +10,4 @@ CONTRACTS = UPPER + '/contracts'
 # file name #
 ERC721 = CONTRACTS + '/ERC721/MyNft.sol'
 ERC20 = CONTRACTS + '/MyERC20.sol'
+BAYC = CONTRACTS + '/BoredApeYachtClub.sol'
