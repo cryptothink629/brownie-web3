@@ -2,8 +2,10 @@ dotenv: .env
 
 
 networks:
-    default: goerli-geth
+    default: rinkeby-geth
     goerli-geth:
+        verify: false
+    rinkeby-geth:
         verify: false
 
 console:

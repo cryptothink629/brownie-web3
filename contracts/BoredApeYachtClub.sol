@@ -1396,7 +1396,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
     mapping (uint256 => string) private _tokenURIs;
 
     // Base URI
-    string private _baseURI;
+    string private _baseURI = "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/";
 
     /*
      *     bytes4(keccak256('balanceOf(address)')) == 0x70a08231
