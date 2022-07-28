@@ -1,10 +1,10 @@
 from web3 import Web3
 from web3.middleware import geth_poa_middleware
-
-from src.constants import RINKEBY_HTTP, GOERLI_IPC
+import os
+from src.constants import RINKEBY_HTTP, GOERLI_IPC, ALCHEMY_MAIN_HTTP
 
 # ipc_provider = Web3.IPCProvider(GOERLI_IPC)
-http_provider = Web3.HTTPProvider(RINKEBY_HTTP)
+http_provider = Web3.HTTPProvider(os.environ[ALCHEMY_MAIN_HTTP])
 
 w3 = Web3(http_provider)
 w3.middleware_onion.inject(geth_poa_middleware, layer=0)

@@ -5,6 +5,8 @@ RINKEBY_IPC = '/root/.ethereum/rinkeby/geth.ipc'
 RINKEBY_HTTP = 'http://localhost:8545'
 MAIN_IPC = '/root/.ethereum/geth.ipc'
 
+ALCHEMY_MAIN_HTTP = 'ALCHEMY_MAIN_HTTP'
+
 # ------#
 UPPER = '..'
 CONTRACTS = UPPER + '/contracts'
