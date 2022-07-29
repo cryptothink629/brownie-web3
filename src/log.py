@@ -13,7 +13,7 @@ def file_handler(output, ):
 def stream_handler():
     ch = logging.StreamHandler()
     ch.setLevel(logging.INFO)
-    fmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s: %(message)s', "%Y-%m-%d %H:%M:%S")
+    fmt = logging.Formatter('%(levelname)s [%(asctime)s] %(name)s: %(message)s', "%m-%d|%H:%M:%S")
     ch.setFormatter(fmt)
     return ch
 

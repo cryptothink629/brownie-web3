@@ -5,7 +5,7 @@ RINKEBY_IPC = '/root/.ethereum/rinkeby/geth.ipc'
 RINKEBY_HTTP = 'http://localhost:8545'
 MAIN_IPC = '/root/.ethereum/geth.ipc'
 
-ALCHEMY_MAIN_HTTP = 'ALCHEMY_MAIN_HTTP'
+
 
 # ------#
 UPPER = '..'
@@ -17,7 +17,9 @@ ERC20 = CONTRACTS + '/MyERC20.sol'
 BAYC = CONTRACTS + '/BoredApeYachtClub.sol'
 CUZUKI = CONTRACTS + '/ERC721/CuZuki.sol'
 
-# ------ #
+# ENV #
 PRIVATE_KEY = 'ETHEREUM_ACCOUNT_KEY'
 ACCOUNT_ADDRESS = 'ETHEREUM_ACCOUNT_ADDRESS'
 
+ALCHEMY_MAIN_HTTP = 'ALCHEMY_MAIN_HTTP'
+DISCORD_WEBHOOK = 'DISCORD_WEBHOOK'
