@@ -3,7 +3,7 @@ from src.web3_client import w3
 
 
 class UniPair(object):
-    UNISWAP_PAIR_ABI = './abi/uniswap_pair.json'
+    UNISWAP_PAIR_ABI = './src/abi/uniswap_pair.json'
 
     def __init__(self, addr):
         self.addr = addr

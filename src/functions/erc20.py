@@ -3,7 +3,7 @@ from src.web3_client import w3
 
 
 class UniERC20(object):
-    ERC20_ABI = './abi/erc20.json'
+    ERC20_ABI = './src/abi/erc20.json'
 
     def __init__(self, addr):
         self.addr = addr

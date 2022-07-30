@@ -9,8 +9,9 @@ def discord(url, content):
     if not url:
         logger.warning('did not config discord webhook')
         return
+    logger.debug('send discord message')
     if isinstance(content, dict):
         content = json.dumps(content)
     webhook = DiscordWebhook(url=url, content=content)
     response = webhook.execute()
-    logger.info('discord webhook response: {}'.format(response))
+    logger.debug('discord webhook response: {}'.format(response))
