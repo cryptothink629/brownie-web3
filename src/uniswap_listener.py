@@ -15,6 +15,8 @@ UNISWAP_V2 = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
 UNISWAP_V3 = '0x1F98431c8aD98523631AE4a59f267346ea31F984'
 
 pair_created_wait_liquidity = deque()
+uni_v2_abi = None
+uni_v3_abi = None
 
 
 async def check_liquidity():
@@ -54,18 +56,20 @@ def log_token_info(token0, token1):
     logger.info('contract: {}'.format(token1.addr))
     logger.info('pooled {}: {}'.format(token1.symbol, token1.pooled))
     # discord
-    if token1.symbol == 'WETH' and token1.pooled >= 2.5:
-        logger.debug('find a pool ETH > 2.5')
-        content = 'Pair {}/{}, pooled ETH {}, token address {}.' \
-            .format(token0.symbol, token1.symbol, round(token1.pooled, 3), token0.addr)
+    if token1.symbol == 'WETH' and token1.pooled >= 2:
+        logger.debug('find a pool ETH >= 2')
+        content = '[{}/{}], pooled ETH {}, name {}, address {}.' \
+            .format(token0.symbol, token1.symbol, round(token1.pooled, 3), token0.name, token0.addr)
         discord(os.environ[DISCORD_WEBHOOK], content)
 
 
 def v2_handler(e):
     logger.debug('Enter v2 handler')
     tx_receipt = w3.eth.waitForTransactionReceipt(e['transactionHash'])
-    abi = fetch_abi_from_address(UNISWAP_V2)
-    contract = w3.eth.contract(address=UNISWAP_V2, abi=abi)
+    global uni_v2_abi
+    if not uni_v2_abi:
+        uni_v2_abi = fetch_abi_from_address(UNISWAP_V2)
+    contract = w3.eth.contract(address=UNISWAP_V2, abi=uni_v2_abi)
     pair_created_event = contract.events.PairCreated()
 
     rich_logs = pair_created_event.processReceipt(tx_receipt)
@@ -103,8 +107,10 @@ def v2_handler(e):
 def v3_handler(e):
     logger.debug('Enter v3 handler')
     tx_receipt = w3.eth.waitForTransactionReceipt(e['transactionHash'])
-    abi = fetch_abi_from_address(UNISWAP_V3)
-    contract = w3.eth.contract(address=UNISWAP_V3, abi=abi)
+    global uni_v3_abi
+    if not uni_v3_abi:
+        uni_v3_abi = fetch_abi_from_address(UNISWAP_V3)
+    contract = w3.eth.contract(address=UNISWAP_V3, abi=uni_v3_abi)
     pool_created_event = contract.events.PoolCreated()
 
     rich_logs = pool_created_event.processReceipt(tx_receipt)
@@ -141,13 +147,11 @@ def main():
     v3_filter = w3.eth.filter({'fromBlock': 'latest', 'address': UNISWAP_V3})
 
     loop = asyncio.get_event_loop()
-    tasks = []
     logger.info('start main loop')
-    tasks.append(log_loop(v2_filter, v2_handler))
-    tasks.append(log_loop(v3_filter, v3_handler))
-    tasks.append(check_liquidity())
-
-    loop.run_until_complete(asyncio.wait(tasks))
+    loop.create_task(log_loop(v2_filter, v2_handler))
+    loop.create_task(log_loop(v3_filter, v3_handler))
+    loop.create_task(check_liquidity())
+    loop.run_forever()
 
 
 if __name__ == '__main__':

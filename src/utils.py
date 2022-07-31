@@ -1,9 +1,10 @@
 import json
-
+from json.decoder import JSONDecodeError
 import requests
 from solcx import compile_files
 
 from src.web3_client import w3
+from src.log import logger
 
 ABI_ENDPOINT = 'https://api.etherscan.io/api?module=contract&action=getabi&address='
 
@@ -31,7 +32,12 @@ def get_abi_from_json_file(file_path):
 def fetch_abi_from_address(address):
     response = requests.get('%s%s' % (ABI_ENDPOINT, address))
     response_json = response.json()
-    abi_json = json.loads(response_json['result'])
+    try:
+        abi_json = json.loads(response_json['result'])
+    except JSONDecodeError as e:
+        logger.error(e, exc_info=True)
+        logger.error('response json: {}'.format(response_json))
+        raise JSONDecodeError
     abi = json.dumps(abi_json, indent=4, sort_keys=True)
     return abi
 
