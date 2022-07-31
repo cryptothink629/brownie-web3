@@ -138,7 +138,6 @@ async def log_loop(event_filter, handler, poll_interval=1):
     while True:
         for new_event in event_filter.get_new_entries():
             handler(new_event)
-        # logger.debug('pause for %ds', poll_interval)
         await asyncio.sleep(poll_interval)
 
 
