@@ -1,3 +1,8 @@
+import time
+
+from web3.exceptions import BadFunctionCallOutput
+
+from src.log import logger
 from src.utils import get_abi_from_json_file
 from src.web3_client import w3
 
@@ -21,11 +26,15 @@ class UniERC20(object):
         return self._call(self.addr, 'decimals')
 
     def _call(self, address, fuction_name, params=()):
-        # error 'Contract source code not verified', use custom abi instead
-        # abi = fetch_abi_from_address(address)
         abi = get_abi_from_json_file(UniERC20.ERC20_ABI)
         g = w3.eth.contract(address=address, abi=abi)
-        result = g.functions[fuction_name](*params).call()
+        try:
+            result = g.functions[fuction_name](*params).call()
+        except BadFunctionCallOutput as e:
+            logger.error(e, exc_info=True)
+            logger.error('error address {}, function name {}'.format(address, fuction_name))
+            time.sleep(5)
+            result = g.functions[fuction_name](*params).call()
         return result
 
 

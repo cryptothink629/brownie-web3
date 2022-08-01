@@ -28,15 +28,13 @@ class UniPair(object):
         return self._call(self.addr, 'token1')
 
     def _call(self, address, fuction_name, params=()):
-        # error 'Contract source code not verified', use custom abi instead
-        # abi = fetch_abi_from_address(address)
         abi = get_abi_from_json_file(UniPair.UNISWAP_PAIR_ABI)
         g = w3.eth.contract(address=address, abi=abi)
         try:
             result = g.functions[fuction_name](*params).call()
         except BadFunctionCallOutput as e:
             logger.error(e, exc_info=True)
-            logger.warning('error, Chain reorg detected?')
+            logger.error('error address {}, function name {}'.format(address, fuction_name))
             time.sleep(5)
             result = g.functions[fuction_name](*params).call()
         return result

@@ -3,6 +3,8 @@ import math
 import os
 from collections import deque
 
+from web3.exceptions import TimeExhausted
+
 from src.constants import DISCORD_WEBHOOK
 from src.functions.discord import discord
 from src.functions.erc20 import UniERC20
@@ -65,7 +67,13 @@ def log_token_info(token0, token1):
 
 def v2_handler(e):
     logger.debug('Enter v2 handler')
-    tx_receipt = w3.eth.waitForTransactionReceipt(e['transactionHash'])
+    try:
+        tx_receipt = w3.eth.wait_for_transaction_receipt(e['transactionHash'])
+    except TimeExhausted as ee:
+        logger.error(ee, exc_info=True)
+        logger.error('event {}'.format(e))
+        logger.error('wait transaction hash timeout, exit v2 handler.')
+        return
     global uni_v2_abi
     if not uni_v2_abi:
         uni_v2_abi = fetch_abi_from_address(UNISWAP_V2)
@@ -106,7 +114,13 @@ def v2_handler(e):
 
 def v3_handler(e):
     logger.debug('Enter v3 handler')
-    tx_receipt = w3.eth.waitForTransactionReceipt(e['transactionHash'])
+    try:
+        tx_receipt = w3.eth.wait_for_transaction_receipt(e['transactionHash'])
+    except TimeExhausted as ee:
+        logger.error(ee, exc_info=True)
+        logger.error('event {}'.format(e))
+        logger.error('wait transaction hash timeout, exit v3 handler.')
+        return
     global uni_v3_abi
     if not uni_v3_abi:
         uni_v3_abi = fetch_abi_from_address(UNISWAP_V3)
