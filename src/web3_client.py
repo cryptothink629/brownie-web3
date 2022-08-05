@@ -1,15 +1,11 @@
-import os
-
 from web3 import Web3
 from web3.middleware import geth_poa_middleware
 
-from src.constants import ALCHEMY_MAIN_HTTP
 from src.log import logger
-
 
 # configure your own provider
 # ipc_provider = Web3.IPCProvider(GOERLI_IPC)
-http_provider = Web3.HTTPProvider(os.environ[ALCHEMY_MAIN_HTTP])
+http_provider = Web3.HTTPProvider('http://localhost:8545')
 
 w3 = Web3(http_provider)
 

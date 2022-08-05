@@ -58,8 +58,8 @@ def log_token_info(token0, token1):
     logger.info('contract: {}'.format(token1.addr))
     logger.info('pooled {}: {}'.format(token1.symbol, token1.pooled))
     # discord
-    if token1.symbol == 'WETH' and token1.pooled >= 2:
-        logger.debug('find a pool ETH >= 2')
+    if token1.symbol == 'WETH' and token1.pooled >= 5:
+        logger.debug('find a pool ETH >= 5')
         content = '[{}/{}], pooled ETH {}, name {}, address {}.' \
             .format(token0.symbol, token1.symbol, round(token1.pooled, 3), token0.name, token0.addr)
         discord(os.environ[DISCORD_WEBHOOK], content)
@@ -87,6 +87,11 @@ def v2_handler(e):
     token0_addr = data['args']['token0']
     token1_addr = data['args']['token1']
     pair_addr = data['args']['pair']
+    if len(pair_created_wait_liquidity) > 0 and pair_addr == pair_created_wait_liquidity[-1].addr:
+        logger.debug('pair addr {} is same as previous one, skip'.format(pair_addr))
+        logger.debug('event transactionHash {}'.format(e['transactionHash']))
+        return
+
     token0 = UniERC20(token0_addr)
     token1 = UniERC20(token1_addr)
 
@@ -150,8 +155,12 @@ def v3_handler(e):
 
 async def log_loop(event_filter, handler, poll_interval=1):
     while True:
-        for new_event in event_filter.get_new_entries():
-            handler(new_event)
+        try:
+            for new_event in event_filter.get_new_entries():
+                handler(new_event)
+        except ValueError as e:
+            logger.error(e, exc_info=True)
+            logger.error('get new event error')
         await asyncio.sleep(poll_interval)
 
 
